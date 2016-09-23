@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bootstrap Table</title>
+    <link rel="stylesheet" type="text/css" href="/Assets/Visual/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/Assets/bootstrapTable/bootstrap-table.min.css" />
+</head>
+<body>
+
+
+<div style="margin: 0 auto; width: 80%;">
+    <div style="width: 100%; height: 300px;"></div>
+    <table id="table"></table>
+</div>
+
+
+
+<script type="text/javascript" src="/Assets/Visual/js/common/jquery-2.2.4.js"></script>
+<script type="text/javascript" src="/Assets/Visual/js/common/bootstrap.min.js"></script>
+<script type="text/javascript" src="/Assets/bootstrapTable/bootstrap-table.js"></script>
+<script type="text/javascript" src="/Assets/bootstrapTable/locale/bootstrap-table-zh-CN.js"></script>
+<script type="text/javascript" src="/Assets/bootstrapTable/extensions/export/bootstrap-table-export.js"></script>
+<script type="text/javascript" src="/Assets/bootstrapTable/extensions/tableExport/tableExport.js"></script>
+<script type="text/javascript" src="/Assets/bootstrapTable/extensions/colResizable/colResizable.js"></script>
+<script type="text/javascript" src="/Assets/bootstrapTable/extensions/resizable/bootstrap-table-resizable.js"></script>
+
+<script type="application/javascript">
+    $(document).ready(
+            function(){
+                var datas = [];
+                for(var i=1; i<=1000; i++){
+                    var obj = {
+                        id: i,
+                        name: "Item " + i,
+                        price: '$' +i,
+                        round:  Math.floor(Math.random() * 1000 + 1)
+                    };
+                    datas.push(obj);
+                }
+
+                var selectRow = '<div class="bs-bars pull-left">' +
+                                    '<div id="toolbar">' +
+                                        '<select class="form-control">' +
+                                            '<option value="">Export Basic</option>' +
+                                            '<option value="all">Export All</option>' +
+                                            '<option value="selected">Export Selected</option>' +
+                                        '</select>' +
+                                    '</div>' +
+                                '</div>';
+                var selectRow = $(selectRow);
+
+                var table = $('#table');
+                table.before(selectRow);
+                var options = {
+                    height: 300,
+                    pageSize: 10,
+                    resizable: true,
+                    clickToSelect: true,      // 与"checkbox"开启ID选择器
+                    singleSelect: false,       // 单选
+                    showExport: true,
+                    exportTypes: ['csv', 'txt', 'sql', 'excel'],
+                    search: true,
+                    showColumns: true,          // 列选择器
+                    exportDataType: null,
+                    searchOnEnterKey: true,
+                    pagination: true,           // 分页
+                    sortStable: true,
+                    columns: [
+                        {
+                            field: 'state',
+                            checkbox: true
+                        },
+                        {
+                            field: 'id',
+                            title: 'Item ID',
+                            sortable: true          // 支持排序
+                        },
+                        {
+                            field: 'name',
+                            title: 'Item Name',
+                            sortable: true
+                        },
+                        {
+                            field: 'price',
+                            title: 'Item Price'
+                        },
+                        {
+                            field: 'round',
+                            title: 'Round',
+                            sortable: true
+                        }
+                    ],
+                    data: datas
+                };
+                table.bootstrapTable(options);
+
+                $(function () {
+                    $('#toolbar').find('select').change(function () {
+//                        table.bootstrapTable('destroy').bootstrapTable({
+//                            exportDataType: $(this).val()
+//                        });
+                        options['exportDataType'] = $(this).val();
+//                        table.bootstrapTable({
+//                            exportDataType: $(this).val()
+//                        });
+
+
+                        table.bootstrapTable('refreshOptions', options);
+                    });
+                })
+            }
+    );
+
+</script>
+
+</body>
+</html>
